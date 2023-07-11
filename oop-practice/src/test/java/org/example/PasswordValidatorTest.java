@@ -29,4 +29,5 @@ public class PasswordValidatorTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("비밀번호는 최소 8자 이상 12자 이하여야 합니다.");
     }
+    
 }
