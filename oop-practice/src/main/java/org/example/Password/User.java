@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Password;
 
 public class User {
     private String password;
@@ -11,6 +11,7 @@ public class User {
 //        String password = randomPasswordGenerator.generatePassword();
 
         // to-be 방식 (약한 결합 -> 인터페이스 사용)
+        // 랜덤 패스워드 제너레이터를 제어하기 위해서
         String password = passwordGenerator.generatePassword();
 
         /**
