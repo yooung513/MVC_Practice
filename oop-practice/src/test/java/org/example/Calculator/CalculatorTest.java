@@ -1,5 +1,6 @@
 package org.example.Calculator;
 
+import org.example.Calculator.calculate.PositiveNumber;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
@@ -30,7 +32,7 @@ public class CalculatorTest {
 
     @DisplayName("뺼셈 연산을 수행한다.")
     @Test
-    void subtractionTest(){
+    void subtractionTest() {
         int result = Calculator.calculate(1, "-", 2);
 
         assertThat(result).isEqualTo(-1);
@@ -40,13 +42,20 @@ public class CalculatorTest {
     @DisplayName("하나의 테스트 메소드 구현")
     @ParameterizedTest
     @MethodSource("formularAndResult")
-    void calculateTest(int operand1, String operator, int operand2, int result){
-        int calculateResult = Calculator.calculate(operand1, operator, operand2);
+    void calculateTest(int operand1, String operator, int operand2, int result) {
+
+        // enum
+//        int calculateResult = Calculator.enumCalculate(operand1, operator, operand2);
+
+        // interface
+        int calculateResult = Calculator.interfaceCalculate(new PositiveNumber(operand1),
+                                                            operator,
+                                                            new PositiveNumber(operand2));
 
         assertThat(calculateResult).isEqualTo(result);
     }
 
-    private static Stream<Arguments> formularAndResult(){
+    private static Stream<Arguments> formularAndResult() {
         return Stream.of(
 
                 arguments(1, "+", 2, 3),
@@ -55,6 +64,17 @@ public class CalculatorTest {
                 arguments(4, "/", 2, 2)
 
         );
+    }
+
+
+    // 양수만 전달하므로 해당 부분은 의미가 없어짐
+    @DisplayName("나눗셈에서 0을 나누는 경우 IllegalArgument 예외를 발생시킨다.")
+    @Test
+    void calculateException() {
+        assertThatCode(() -> Calculator.interfaceCalculate(new PositiveNumber(10), "/", new PositiveNumber(0)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("0으로 나눌 수 없습니다.");
+
     }
 
 }
